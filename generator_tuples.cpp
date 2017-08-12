@@ -110,6 +110,20 @@ void genClass(ofstream &file, int arity) {
   buf << "    return *this;\n";
   buf << "  }\n";
 
+  // less than operator
+  buf << "  bool operator<(const " << getName(arity) << "_tuple<";
+  for (int i = 0; i < arity; i++) {
+    buf << "T" << (i + 1);
+    if (i < arity - 1)
+      buf << ", ";
+  }
+  buf << "> &p) const {\n";
+  for (int i = 0; i < arity; i++) {
+    buf << "    if(" << getOrdinal(i + 1) << " < p." << getOrdinal(i + 1) << ") return true;\n";
+  }
+  buf << "    return false;\n";
+  buf << "  }\n";
+
   buf << "};\n\n";
 
   file << buf.str();
